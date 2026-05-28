@@ -8,7 +8,6 @@ TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 bot = telebot.TeleBot(TOKEN)
 app = Flask(name)
 
-# مسار الموقع (سيرفر الويب)
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
@@ -21,7 +20,6 @@ def send_welcome(message):
     markup.add(btn)
     bot.send_message(message.chat.id, "أهلاً بك! اضغط على الزر أدناه:", reply_markup=markup)
 
-# تشغيل البوت في خيط (Thread) منفصل
 def run_bot():
     bot.infinity_polling()
 
