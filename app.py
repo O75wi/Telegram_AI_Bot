@@ -9,7 +9,7 @@ TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 GEMINI_KEY = os.getenv('GEMINI_API_KEY')
 
 genai.configure(api_key=GEMINI_KEY)
-model = genai.GenerativeModel('gemini-2.0-flash')
+model = genai.GenerativeModel('gemini-1.5-flash-latest')
 
 bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
@@ -46,9 +46,8 @@ def send_welcome(message):
     markup.add(btn)
     bot.send_message(message.chat.id, "أهلاً بك! اضغط على الزر أدناه:", reply_markup=markup)
 
-def run_bot():
-    bot.infinity_polling()
+# ✅ هذا يشتغل دائماً على Railway
+threading.Thread(target=bot.infinity_polling, daemon=True).start()
 
 if __name__ == '__main__':
-    threading.Thread(target=run_bot).start()
     app.run(host='0.0.0.0', port=8080)
