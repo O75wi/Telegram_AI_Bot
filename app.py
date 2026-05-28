@@ -6,7 +6,7 @@ import threading
 
 TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 bot = telebot.TeleBot(TOKEN)
-app = Flask(name)
+app = Flask(__name__)
 
 @app.route('/')
 def index():
