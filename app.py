@@ -1,6 +1,6 @@
 import telebot
 import os
-import google.generativeai as genai
+from google import genai
 from flask import Flask, send_from_directory, request, jsonify
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 import threading
@@ -8,8 +8,7 @@ import threading
 TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 GEMINI_KEY = os.getenv('GEMINI_API_KEY')
 
-genai.configure(api_key=GEMINI_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash-latest')
+client = genai.Client(api_key=GEMINI_KEY)
 
 bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
@@ -33,7 +32,10 @@ def chat():
             full_prompt += f"{role}: {h['content']}\n"
         full_prompt += f"المستخدم: {message}"
         
-        response = model.generate_content(full_prompt)
+        response = client.models.generate_content(
+            model='gemini-2.0-flash',
+            contents=full_prompt
+        )
         return jsonify({'reply': response.text})
     except Exception as e:
         return jsonify({'detail': str(e)}), 500
@@ -46,7 +48,6 @@ def send_welcome(message):
     markup.add(btn)
     bot.send_message(message.chat.id, "أهلاً بك! اضغط على الزر أدناه:", reply_markup=markup)
 
-# ✅ هذا يشتغل دائماً على Railway
 threading.Thread(target=bot.infinity_polling, daemon=True).start()
 
 if __name__ == '__main__':
