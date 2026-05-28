@@ -8,9 +8,8 @@ bot = telebot.TeleBot(TOKEN)
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     markup = InlineKeyboardMarkup()
-    # ضع رابط مشروعك في Railway هنا
-    # يجب أن يبدأ بـ https://
-    web_app = WebAppInfo(url='https://your-app-name.up.railway.app') 
+    # الرابط الصحيح الذي حصلت عليه
+    web_app = WebAppInfo(url='https://telegramaibot-production-522e.up.railway.app') 
     btn = InlineKeyboardButton(text="START AI", web_app=web_app)
     markup.add(btn)
     
